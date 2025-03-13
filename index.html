@@ -49,7 +49,7 @@
             background: var(--dark);
             color: var(--light);
             font-family: inherit;
-            font-size: 1rem;
+            font-size: 0.8rem; /* Tamaño de fuente reducido */
             text-transform: uppercase;
         }
 
@@ -76,6 +76,10 @@
             align-items: center;
             gap: 0.3rem;
         }
+
+        audio {
+            display: none; /* Oculta el reproductor de audio */
+        }
     </style>
 </head>
 <body>
@@ -96,11 +100,26 @@
         <label>💣 Cantidad:</label>
         <input type="number" id="cantidad" min="1" value="1">
 
-        <h3>🥗 Ingredientes:</h3>
+        <h3>🥗 Ingredientes (por papa):</h3>
         <div class="ingredientes-container" id="ingredientesContainer"></div>
+
+        <label>🥤 Bebida:</label>
+        <select id="bebida">
+            <option value="ninguna">🚫 Sin bebida</option>
+            <option value="gaseosa">🥤 Gaseosa</option>
+            <option value="limonada">🍋 Limonada</option>
+            <option value="jugo">🧃 Jugo natural</option>
+            <option value="cerveza">🍺 Cerveza</option>
+        </select>
 
         <button id="enviarPedido">🚀 Enviar Pedido</button>
     </div>
+
+    <!-- Audio de fondo (La Casa de Papel) -->
+    <audio id="backgroundAudio" autoplay loop>
+        <source src="https://www.soundjay.com/button/beep-07.wav" type="audio/mpeg">
+        Tu navegador no soporta audio.
+    </audio>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -115,10 +134,15 @@
                 contenedorIngredientes.appendChild(div);
             });
 
+            // Reproducir audio de fondo
+            const audio = document.getElementById("backgroundAudio");
+            audio.volume = 0.3; // Volumen bajo para no ser intrusivo
+
             document.getElementById("enviarPedido").addEventListener("click", () => {
                 const telefono = document.getElementById("userPhone").value;
                 const tipoPapa = document.getElementById("tipoPapa").value;
                 const cantidad = document.getElementById("cantidad").value;
+                const bebida = document.getElementById("bebida").value;
                 const ingredientesSeleccionados = Array.from(document.querySelectorAll('.ingrediente input:checked'))
                     .map(input => input.value)
                     .join(", ") || "Sin ingredientes extra";
@@ -128,10 +152,13 @@
                     return;
                 }
 
-                const mensaje = `📲 Pedido de STOLEN POTATO:%0A🍟 *Tipo de Papa:* ${tipoPapa}%0A💣 *Cantidad:* ${cantidad}%0A🥗 *Ingredientes:* ${ingredientesSeleccionados}%0A📞 *Contacto:* ${telefono}`;
+                const mensaje = `📲 Pedido de STOLEN POTATO:%0A🍟 *Tipo de Papa:* ${tipoPapa}%0A💣 *Cantidad:* ${cantidad}%0A🥗 *Ingredientes:* ${ingredientesSeleccionados}%0A🥤 *Bebida:* ${bebida}%0A📞 *Contacto:* ${telefono}`;
                 
-                const url = `https://api.whatsapp.com/send?phone=573028143855&text=${mensaje}`;
+                const url = `https://wa.me/573028143855?text=${mensaje}`;
                 window.open(url, "_blank");
+
+                // Ventana emergente de confirmación
+                alert("✅ Pedido enviado correctamente. ¡Gracias por elegir STOLEN POTATO!");
             });
         });
     </script>
