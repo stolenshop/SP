@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stolen Potato - La Revolución de las Papas</title>
+    <title>Stolen Potato - Pedido</title>
     <link href="https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -26,14 +26,15 @@
 
         h1 {
             font-family: var(--font-title);
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: var(--accent);
             text-shadow: 3px 3px 0 var(--secondary);
+            margin-bottom: 1rem;
         }
 
         .container {
             max-width: 500px;
-            margin: 2rem auto;
+            margin: 1rem auto;
             padding: 1rem;
             background: rgba(0,0,0,0.9);
             border-radius: 15px;
@@ -49,7 +50,7 @@
             background: var(--dark);
             color: var(--light);
             font-family: inherit;
-            font-size: 0.8rem; /* Tamaño de fuente reducido */
+            font-size: 1rem;
             text-transform: uppercase;
         }
 
@@ -64,22 +65,40 @@
             color: var(--dark);
         }
 
-        .ingredientes-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0.5rem;
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 400px;
+            background: var(--dark);
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px var(--accent);
+            text-align: left;
         }
 
-        .ingrediente {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
+        .modal h2 {
+            text-align: center;
         }
 
-        audio {
-            display: none; /* Oculta el reproductor de audio */
+        .modal label {
+            display: block;
+            margin: 0.3rem 0;
         }
+
+        .modal button {
+            width: auto;
+            margin-top: 1rem;
+        }
+
+        #qrScanner {
+            display: none;
+            width: 100%;
+        }
+
     </style>
 </head>
 <body>
@@ -100,26 +119,33 @@
         <label>💣 Cantidad:</label>
         <input type="number" id="cantidad" min="1" value="1">
 
-        <h3>🥗 Ingredientes (por papa):</h3>
-        <div class="ingredientes-container" id="ingredientesContainer"></div>
+        <button onclick="openModal('ingredientesModal')">🥗 Seleccionar Ingredientes</button>
+        <button onclick="openModal('bebidasModal')">🥤 Seleccionar Bebida</button>
 
-        <label>🥤 Bebida:</label>
-        <select id="bebida">
-            <option value="ninguna">🚫 Sin bebida</option>
-            <option value="gaseosa">🥤 Gaseosa</option>
-            <option value="limonada">🍋 Limonada</option>
-            <option value="jugo">🧃 Jugo natural</option>
-            <option value="cerveza">🍺 Cerveza</option>
-        </select>
+        <button id="escanearQR">📸 Escanear QR</button>
+        <video id="qrScanner"></video>
 
         <button id="enviarPedido">🚀 Enviar Pedido</button>
     </div>
 
-    <!-- Audio de fondo (La Casa de Papel) -->
-    <audio id="backgroundAudio" autoplay loop>
-        <source src="https://www.soundjay.com/button/beep-07.wav" type="audio/mpeg">
-        Tu navegador no soporta audio.
-    </audio>
+    <!-- MODAL INGREDIENTES -->
+    <div id="ingredientesModal" class="modal">
+        <h2>🥗 Ingredientes</h2>
+        <div id="ingredientesContainer"></div>
+        <button onclick="closeModal('ingredientesModal')">✔ Listo</button>
+    </div>
+
+    <!-- MODAL BEBIDAS -->
+    <div id="bebidasModal" class="modal">
+        <h2>🥤 Bebidas</h2>
+        <select id="bebida">
+            <option value="Ninguna">🚫 Ninguna</option>
+            <option value="Coca-Cola">🥤 Coca-Cola</option>
+            <option value="Jugo Natural">🍊 Jugo Natural</option>
+            <option value="Cerveza">🍺 Cerveza</option>
+        </select>
+        <button onclick="closeModal('bebidasModal')">✔ Listo</button>
+    </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -128,22 +154,17 @@
             
             const contenedorIngredientes = document.getElementById("ingredientesContainer");
             ingredientes.forEach(ingrediente => {
-                const div = document.createElement("div");
-                div.classList.add("ingrediente");
-                div.innerHTML = `<input type="checkbox" value="${ingrediente}"> <label>${ingrediente}</label>`;
-                contenedorIngredientes.appendChild(div);
+                const label = document.createElement("label");
+                label.innerHTML = `<input type="checkbox" value="${ingrediente}"> ${ingrediente}`;
+                contenedorIngredientes.appendChild(label);
             });
-
-            // Reproducir audio de fondo
-            const audio = document.getElementById("backgroundAudio");
-            audio.volume = 0.3; // Volumen bajo para no ser intrusivo
 
             document.getElementById("enviarPedido").addEventListener("click", () => {
                 const telefono = document.getElementById("userPhone").value;
                 const tipoPapa = document.getElementById("tipoPapa").value;
                 const cantidad = document.getElementById("cantidad").value;
                 const bebida = document.getElementById("bebida").value;
-                const ingredientesSeleccionados = Array.from(document.querySelectorAll('.ingrediente input:checked'))
+                const ingredientesSeleccionados = Array.from(document.querySelectorAll('#ingredientesContainer input:checked'))
                     .map(input => input.value)
                     .join(", ") || "Sin ingredientes extra";
 
@@ -154,13 +175,31 @@
 
                 const mensaje = `📲 Pedido de STOLEN POTATO:%0A🍟 *Tipo de Papa:* ${tipoPapa}%0A💣 *Cantidad:* ${cantidad}%0A🥗 *Ingredientes:* ${ingredientesSeleccionados}%0A🥤 *Bebida:* ${bebida}%0A📞 *Contacto:* ${telefono}`;
                 
-                const url = `https://wa.me/573028143855?text=${mensaje}`;
+                const url = `https://api.whatsapp.com/send?phone=573028143855&text=${mensaje}`;
                 window.open(url, "_blank");
+            });
 
-                // Ventana emergente de confirmación
-                alert("✅ Pedido enviado correctamente. ¡Gracias por elegir STOLEN POTATO!");
+            document.getElementById("escanearQR").addEventListener("click", () => {
+                const video = document.getElementById("qrScanner");
+                video.style.display = "block";
+                navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+                    .then(stream => {
+                        video.srcObject = stream;
+                        video.play();
+                    })
+                    .catch(err => {
+                        alert("Error al acceder a la cámara.");
+                    });
             });
         });
+
+        function openModal(id) {
+            document.getElementById(id).style.display = "block";
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = "none";
+        }
     </script>
 
 </body>
