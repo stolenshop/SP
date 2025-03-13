@@ -16,377 +16,125 @@
             --font-text: 'Press Start 2P', monospace;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: var(--light);
             font-family: var(--font-text);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Animación optimizada con transformaciones 3D */
-        @keyframes potatoRun {
-            0% { transform: translate3d(-100%, 0, 0) rotate(0deg); }
-            50% { transform: translate3d(50vw, -50%, 0) rotate(540deg); }
-            100% { transform: translate3d(100vw, 0, 0) rotate(1080deg); }
-        }
-
-        .thief-potato {
-            position: fixed;
-            bottom: 20%;
-            font-size: 4rem;
-            animation: potatoRun 5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-            will-change: transform;
-            pointer-events: none;
-            filter: drop-shadow(0 0 10px var(--accent));
-            opacity: 0.9;
-        }
-
-        header {
-            background: var(--dark);
-            padding: 1.5rem;
             text-align: center;
-            position: relative;
-            border-bottom: 5px solid var(--accent);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
         h1 {
             font-family: var(--font-title);
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: var(--accent);
             text-shadow: 3px 3px 0 var(--secondary);
-            letter-spacing: 3px;
-            margin-bottom: 0.5rem;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 500px;
             margin: 2rem auto;
             padding: 1rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .builder-section {
             background: rgba(0,0,0,0.9);
-            padding: 2rem;
-            border-radius: 20px;
-            border: 3px solid var(--accent);
-            box-shadow: 0 0 30px rgba(255,107,0,0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .input-group {
-            margin: 1.5rem 0;
-            position: relative;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--accent);
+            border-radius: 15px;
+            box-shadow: 0 0 15px var(--primary);
         }
 
         select, input, button {
             width: 100%;
-            padding: 1rem;
+            padding: 0.8rem;
             margin: 0.5rem 0;
-            border: 3px solid var(--primary);
-            border-radius: 15px;
+            border-radius: 10px;
+            border: 2px solid var(--primary);
             background: var(--dark);
             color: var(--light);
             font-family: inherit;
-            font-size: 0.9rem;
+            font-size: 1rem;
             text-transform: uppercase;
-            transition: all 0.3s;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 15px var(--accent);
         }
 
         button {
             background: var(--primary);
             cursor: pointer;
-            letter-spacing: 2px;
-            position: relative;
-            overflow: hidden;
+            font-weight: bold;
         }
 
         button:hover {
             background: var(--accent);
             color: var(--dark);
-            transform: scale(1.05);
         }
 
-        button::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: rgba(255,255,255,0.1);
-            transform: rotate(45deg);
-            transition: all 0.5s;
-        }
-
-        button:hover::after {
-            left: 150%;
-        }
-
-        /* Estilos para la ventana de notificación */
-        .notification-window {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            background: var(--dark);
-            padding: 2rem;
-            border-radius: 20px;
-            border: 3px solid var(--accent);
-            box-shadow: 0 0 30px rgba(255, 107, 0, 0.5);
-            z-index: 1001;
-            opacity: 0;
-            transition: all 0.3s ease-in-out;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .notification-window.active {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-        }
-
-        .notification-content h2 {
-            color: var(--accent);
-            margin-bottom: 1rem;
-        }
-
-        .notification-content p {
-            color: var(--light);
-            margin-bottom: 1.5rem;
-        }
-
-        .notification-content button {
-            background: var(--primary);
-            color: var(--light);
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .notification-content button:hover {
-            background: var(--accent);
-            color: var(--dark);
-        }
-
-        /* Estilos para los ingredientes */
         .ingredientes-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin: 1rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
         .ingrediente {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-        }
-
-        .ingrediente input {
-            width: auto;
-        }
-
-        /* Estilos para el pago con QR */
-        .qr-container {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .qr-container video {
-            width: 100%;
-            max-width: 300px;
-            border-radius: 15px;
-            border: 3px solid var(--accent);
+            gap: 0.3rem;
         }
     </style>
 </head>
 <body>
-    <div class="thief-potato">🥔🎭</div>
 
-    <header>
-        <h1>STOLEN POTATO</h1>
-        <p>¡La forma más épica de comer papas!</p>
-    </header>
-
-    <div class="user-profile" id="userProfile">
-        <div id="profileContent"></div>
-        <button onclick="potatoApp.toggleCart()">🛒 VER MIS ROBOS</button>
-    </div>
+    <h1>STOLEN POTATO</h1>
 
     <div class="container">
-        <div class="builder-section">
-            <div class="input-group">
-                <label for="userPhone">📱 NÚMERO DE CONTACTO</label>
-                <input type="tel" id="userPhone" placeholder="3001234567" pattern="3\d{9}" required>
-                <small>¡Solo para bandidos colombianos!</small>
-            </div>
+        <label>📱 Número de contacto:</label>
+        <input type="tel" id="userPhone" placeholder="3001234567" pattern="3\d{9}" required>
 
-            <div class="input-group">
-                <label for="tipoPapa">🔫 TIPO DE PAPA</label>
-                <select id="tipoPapa">
-                    <option value="fritas">🍟 FRITAS CRIMINALES</option>
-                    <option value="horneadas">🔥 HORNEADAS PROHIBIDAS</option>
-                    <option value="rusticas">🏔️ RÚSTICAS FUGITIVAS</option>
-                </select>
-            </div>
+        <label>🍟 Tipo de papa:</label>
+        <select id="tipoPapa">
+            <option value="fritas">🍟 Fritas</option>
+            <option value="horneadas">🔥 Horneadas</option>
+            <option value="rusticas">🏔️ Rústicas</option>
+        </select>
 
-            <div class="input-group">
-                <label for="cantidad">💣 CANTIDAD</label>
-                <input type="number" id="cantidad" min="1" value="1">
-            </div>
+        <label>💣 Cantidad:</label>
+        <input type="number" id="cantidad" min="1" value="1">
 
-            <button id="addToCart">🚨 ROBAR PAPA 🚨</button>
-        </div>
-    </div>
+        <h3>🥗 Ingredientes:</h3>
+        <div class="ingredientes-container" id="ingredientesContainer"></div>
 
-    <!-- Ventana de notificación para ingredientes -->
-    <div class="notification-window" id="ingredientesWindow">
-        <div class="notification-content">
-            <h2>🥗 INGREDIENTES</h2>
-            <div class="ingredientes-container" id="ingredientesContainer">
-                <!-- Ingredientes dinámicos -->
-            </div>
-            <button onclick="potatoApp.agregarAlBotin()">✅ AGREGAR AL BOTÍN</button>
-        </div>
-    </div>
-
-    <!-- Ventana de pago con QR -->
-    <div class="notification-window" id="qrWindow">
-        <div class="notification-content">
-            <h2>💳 PAGO CON QR</h2>
-            <div class="qr-container" id="qrContainer">
-                <video id="qrVideo"></video>
-                <button onclick="potatoApp.cerrarPagoQR()">CERRAR</button>
-            </div>
-        </div>
+        <button id="enviarPedido">🚀 Enviar Pedido</button>
     </div>
 
     <script>
-        class PotatoLegend {
-            constructor() {
-                this.users = JSON.parse(localStorage.getItem('potatoLegends')) || {};
-                this.currentUser = null;
-                this.cart = [];
-                this.ingredientes = [
-                    "Queso", "Tocino", "Cebolla", "Chile", "Aguacate",
-                    "Jamón", "Maíz", "Pollo", "Salsa BBQ", "Crema",
-                    "Champiñones", "Tomate", "Pimentón", "Aceitunas", "Pepinillos"
-                ];
-                this.init();
-            }
+        document.addEventListener("DOMContentLoaded", () => {
+            const ingredientes = ["Queso", "Tocino", "Cebolla", "Chile", "Aguacate",
+                "Jamón", "Maíz", "Pollo", "Salsa BBQ", "Crema", "Champiñones"];
+            
+            const contenedorIngredientes = document.getElementById("ingredientesContainer");
+            ingredientes.forEach(ingrediente => {
+                const div = document.createElement("div");
+                div.classList.add("ingrediente");
+                div.innerHTML = `<input type="checkbox" value="${ingrediente}"> <label>${ingrediente}</label>`;
+                contenedorIngredientes.appendChild(div);
+            });
 
-            init() {
-                this.setupEventListeners();
-                this.updateProfile();
-                this.cargarIngredientes();
-            }
-
-            setupEventListeners() {
-                document.getElementById('addToCart').addEventListener('click', () => this.mostrarIngredientes());
-                document.getElementById('userPhone').addEventListener('input', (e) => this.validatePhone(e.target));
-            }
-
-            validatePhone(input) {
-                const isValid = /^3\d{0,9}$/.test(input.value);
-                input.style.borderColor = isValid ? 'var(--accent)' : '#ff0000';
-            }
-
-            cargarIngredientes() {
-                const container = document.getElementById('ingredientesContainer');
-                container.innerHTML = this.ingredientes.map(ingrediente => `
-                    <div class="ingrediente">
-                        <input type="checkbox" id="${ingrediente}" value="${ingrediente}">
-                        <label for="${ingrediente}">${ingrediente}</label>
-                    </div>
-                `).join('');
-            }
-
-            mostrarIngredientes() {
-                const ingredientesWindow = document.getElementById('ingredientesWindow');
-                ingredientesWindow.classList.add('active');
-            }
-
-            agregarAlBotin() {
+            document.getElementById("enviarPedido").addEventListener("click", () => {
+                const telefono = document.getElementById("userPhone").value;
+                const tipoPapa = document.getElementById("tipoPapa").value;
+                const cantidad = document.getElementById("cantidad").value;
                 const ingredientesSeleccionados = Array.from(document.querySelectorAll('.ingrediente input:checked'))
-                    .map(input => input.value);
-                const tipoPapa = document.getElementById('tipoPapa').value;
-                const cantidad = parseInt(document.getElementById('cantidad').value);
+                    .map(input => input.value)
+                    .join(", ") || "Sin ingredientes extra";
 
-                this.cart.push({
-                    tipo: tipoPapa,
-                    cantidad: cantidad,
-                    ingredientes: ingredientesSeleccionados,
-                    timestamp: new Date().toISOString()
-                });
-
-                this.mostrarPagoQR();
-                this.cerrarVentana('ingredientesWindow');
-            }
-
-            mostrarPagoQR() {
-                const qrWindow = document.getElementById('qrWindow');
-                const qrContainer = document.getElementById('qrContainer');
-                qrWindow.classList.add('active');
-                qrContainer.style.display = 'flex';
-
-                // Simulación de activación de cámara (no funcional en este ejemplo)
-                const qrVideo = document.getElementById('qrVideo');
-                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-                        .then(stream => {
-                            qrVideo.srcObject = stream;
-                            qrVideo.play();
-                        })
-                        .catch(error => {
-                            console.error('Error al acceder a la cámara:', error);
-                        });
+                if (!telefono.match(/^3\d{9}$/)) {
+                    alert("📵 Ingresa un número de contacto válido en Colombia.");
+                    return;
                 }
-            }
 
-            cerrarPagoQR() {
-                this.cerrarVentana('qrWindow');
-                const qrVideo = document.getElementById('qrVideo');
-                if (qrVideo.srcObject) {
-                    qrVideo.srcObject.getTracks().forEach(track => track.stop());
-                }
-            }
-
-            cerrarVentana(id) {
-                const ventana = document.getElementById(id);
-                ventana.classList.remove('active');
-            }
-        }
-
-        const potatoApp = new PotatoLegend();
+                const mensaje = `📲 Pedido de STOLEN POTATO:%0A🍟 *Tipo de Papa:* ${tipoPapa}%0A💣 *Cantidad:* ${cantidad}%0A🥗 *Ingredientes:* ${ingredientesSeleccionados}%0A📞 *Contacto:* ${telefono}`;
+                
+                const url = `https://api.whatsapp.com/send?phone=573028143855&text=${mensaje}`;
+                window.open(url, "_blank");
+            });
+        });
     </script>
+
 </body>
 </html>
